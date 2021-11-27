@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Laethel/discord-music-bot#readme",
   "dependencies": {
-    "discord.js": "^13.3.1"
+    "discord.js": "^13.3.1",
+    "youtube-sr": "^4.1.9",
+    "ytdl-core": "^4.9.1"
   }
 }
