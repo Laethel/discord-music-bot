@@ -58,7 +58,6 @@ module.exports.run = async (message, args) => {
 
       play(queueConstruct.songs[0]);
     } else {
-      queue.delete("queue");
       return message.reply("You have to be in a voice channel to do this");
     }
   } else {
@@ -66,7 +65,7 @@ module.exports.run = async (message, args) => {
     log(`Added music to the queue : ${song.title}`);
 
     return message.channel.send(
-      strings.songAddedToQueue
+      "'**SONG_TITLE**' has been added to the queue\n<url>"
         .replace("SONG_TITLE", song.title)
         .replace("url", song.url)
     );
@@ -74,36 +73,7 @@ module.exports.run = async (message, args) => {
 };
 
 function play(song) {
-  const serverQueue = global.queue.get("queue");
-
-  if (!song) {
-    serverQueue.voiceChannel.leave();
-    return queue.delete("queue");
-  }
 
   console.log(`Started playing the music : ${song.title}`);
 
-  const dispatcher = serverQueue.connection.play(
-    ytdl(song.url, {
-      filter: "audioonly",
-      quality: "highestaudio",
-      highWaterMark: 1 << 25,
-    })
-  );
-
-  dispatcher.on("finish", () => {
-    if (serverQueue.songs[0])
-      log(`Finished playing the music : ${serverQueue.songs[0].title}`);
-    else log(`Finished playing all musics, no more musics in the queue`);
-    if (serverQueue.loop === false || serverQueue.skipped === true)
-      serverQueue.songs.shift();
-    if (serverQueue.skipped === true) serverQueue.skipped = false;
-    _play(serverQueue.songs[0]);
-  });
-
-  dispatcher.on("error", (error) => {
-    console.log(error);
-  });
-
-  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 }
