@@ -1,8 +1,9 @@
 const { Client, Intents } = require("discord.js");
-const config = require("./config.json");
+const config = require("../config.json");
 const play = require("./play.js");
 
 const prefix = "!";
+global.queue = new Map();
 
 const client = new Client({
   intents: [
